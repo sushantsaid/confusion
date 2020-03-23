@@ -36,6 +36,17 @@ class Main extends Component{
       );
     }
 
+    const dishWithId = ({match})=>{
+      var DISHID = match.params.dishId;
+      console.log("dish id : ",DISHID);
+      return(
+        <DishDetail 
+        dish = {this.state.dishes.filter((dish)=>dish.id === parseInt(DISHID,10))[0]}
+        comments = {this.state.comments.filter((comment)=>comment.dishId === parseInt(DISHID,10))}
+        />
+      );
+    }
+
     return (
       <div>
         {/*first component is navigation bar */}
@@ -44,12 +55,13 @@ class Main extends Component{
         <Switch>
           <Route path="/home" component={HomePage}/>
           <Route exact path = "/menu" component = {()=> <Menu dishes={this.state.dishes}/>}/>
+          <Route path = "/menu/:dishId" component = {dishWithId}/>
           <Route exact path = "/contactus" component={Contact}/>
           <Redirect to="/home"/>{/*Default path when none of the Route paths are matched*/}
         </Switch>
 
 
-        {/*fourth component is dish details of selected dish */}
+        {/*last component is dish details of selected dish */}
         <Footer/>
       </div>
     );
