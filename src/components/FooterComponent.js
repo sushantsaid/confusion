@@ -1,5 +1,5 @@
 import React from 'react';
-
+import {NavLink} from 'react-router-dom';
 function Footer(props){
     return(
         <div className="footer">
@@ -8,10 +8,10 @@ function Footer(props){
                 <div className="col-4 offset-1 col-sm-2">
                     <h5>Links</h5>
                     <ul className="list-unstyled">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Menu</a></li>
-                        <li><a href="contactus.html">Contact</a></li>
+                        <li><NavLink className="nav-link" to="/home">Home</NavLink></li>
+                        <li><NavLink className="nav-link" to="/aboutus">About Us</NavLink></li>
+                        <li><NavLink className="nav-link" to="/menu">Menu</NavLink></li>
+                        <li><NavLink className="nav-link" to="/contactus">Contact Us</NavLink></li>
                     </ul>
                 </div>
                 <div className="col-7 col-sm-5">
