@@ -25,6 +25,7 @@ class Contact extends Component{
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleBlur = this.handleBlur.bind(this);
+        
     }
 
     //Handler function to handle changes in input
@@ -42,7 +43,7 @@ class Contact extends Component{
     //Handler function to submit changes in input
     handleSubmit(event){
         console.log("Current state is : ",JSON.stringify(this.state));
-        alert("State : ",JSON.stringify(this.state));
+        alert("State : "+JSON.stringify(this.state));
         event.preventDefault(); //use this method to prevent redirecting to another page
     }
 
