@@ -12,7 +12,7 @@ import {Route,Switch,Redirect} from 'react-router-dom';
 import {withRouter} from 'react-router-dom'; //If we are using Redux, withRouter should be imported
 import {connect} from 'react-redux';
 
-import {addComment} from '../redux/ActionCreators';
+import {addComment,fetchDishes} from '../redux/ActionCreators';
 
 const mapStateToProps = (state) => {
   return {
@@ -24,7 +24,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = dispatch =>({
-  addComment : (dishId,rating,author,comment) => dispatch(addComment(dishId,rating,author,comment))
+  addComment : (dishId,rating,author,comment) => dispatch(addComment(dishId,rating,author,comment)),
+  fetchDishes : ()=>{dispatch(fetchDishes())}
 });
 
 class Main extends Component{
@@ -35,12 +36,19 @@ class Main extends Component{
   }
   */
 
+  //when the component is mounted then fetch the details of dishes
+  componentDidMount(){
+    this.props.fetchDishes();
+  }
+
   render(){
 
     const HomePage = () => {
       return(
         <Home 
-        dish={this.props.dishes.filter((dish)=>dish.featured)[0]}// pass the featured dish as props
+        dish={this.props.dishes.dishes.filter((dish)=>dish.featured)[0]}// pass the featured dish as props
+        dishesLoading={this.props.dishes.isLoading}
+        dishesErrMsg={this.props.dishes.errMsg}
         promotion = {this.props.promotions.filter((promo)=>promo.featured)[0]}// pass the featured promotion
         leader = {this.props.leaders.filter((leader)=>leader.featured)[0]} // pass the featured leader
         />
@@ -52,7 +60,9 @@ class Main extends Component{
       console.log("dish id : ",DISHID);
       return(
         <DishDetail 
-        dish = {this.props.dishes.filter((dish)=>dish.id === parseInt(DISHID,10))[0]}
+        dish = {this.props.dishes.dishes.filter((dish)=>dish.id === parseInt(DISHID,10))[0]}
+        isLoading={this.props.dishes.isLoading}
+        errMsg={this.props.dishes.errMsg}
         comments = {this.props.comments.filter((comment)=>comment.dishId === parseInt(DISHID,10))}
         //addComment attribute will add new comment submitted by user
         addComment = {this.props.addComment}

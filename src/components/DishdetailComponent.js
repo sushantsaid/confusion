@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 import {Modal,ModalBody,Button,Row,Col} from 'reactstrap';
 
 import {Control,LocalForm,Errors} from 'react-redux-form';
-
+import {Loading} from './LoadingComponent';
     //function to add "Dishes" to the view
     function RenderDish({dish}){
         if(dish!=null){
@@ -60,7 +60,25 @@ import {Control,LocalForm,Errors} from 'react-redux-form';
 
     const DishDetail=(props)=>{
         console.log("props : ",props);
-        if(props.dish!=null){
+        if(props.isLoading){
+            return(
+                <div className="container">
+                    <div className="row">
+                        <Loading/>
+                    </div>
+                </div>
+            );
+        }
+        else if(props.errMsg){
+            return(
+                <div className="container">
+                    <div className="row">
+                        <h4>{props.errMsg}</h4>
+                    </div>
+                </div>
+            );
+        }
+        else if(props.dish!=null){
             console.log("Inside DishDetail");
             return(
                 <div className="container">
