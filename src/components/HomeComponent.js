@@ -2,7 +2,7 @@ import React from 'react';
 import {Card,CardBody,CardImg,CardText,CardTitle,CardSubtitle} from 'reactstrap';
 import { Loading } from './LoadingComponent';
 import { baseUrl } from '../shared/baseUrl';
-
+import {FadeTransform} from 'react-animation-components';
 function RenderCard({item,isLoading,errMsg})//item will be received from the Home function/component
 {
     if(isLoading){
@@ -13,15 +13,20 @@ function RenderCard({item,isLoading,errMsg})//item will be received from the Hom
     }
     else
         return(
-            <Card>
-                <CardImg src={baseUrl+item.image} alt={item.name}/>
-                <CardBody>
-                    <CardTitle>{item.name}</CardTitle>
-                    {/* Render the designation only if it is present(in this case only leader has designation);dish and promotions doesn't have designation */}
-                    {item.designation? <CardSubtitle>{item.designation}</CardSubtitle> : null}
-                    <CardText>{item.description}</CardText>
-                </CardBody>
-            </Card>
+            <FadeTransform in 
+                transformProps={{
+                    exitTransform : 'scale(0.5) translateY(-50%)'
+                }}>
+                <Card>
+                    <CardImg src={baseUrl+item.image} alt={item.name}/>
+                    <CardBody>
+                        <CardTitle>{item.name}</CardTitle>
+                        {/* Render the designation only if it is present(in this case only leader has designation);dish and promotions doesn't have designation */}
+                        {item.designation? <CardSubtitle>{item.designation}</CardSubtitle> : null}
+                        <CardText>{item.description}</CardText>
+                    </CardBody>
+                </Card>
+            </FadeTransform>
         );
 }
 

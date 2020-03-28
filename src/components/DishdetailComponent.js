@@ -7,18 +7,25 @@ import {Control,LocalForm,Errors} from 'react-redux-form';
 import {Loading} from './LoadingComponent';
 import {baseUrl} from '../shared/baseUrl';
 
+import {FadeTransform,Fade,Stagger} from 'react-animation-components';
+
     //function to add "Dishes" to the view
     function RenderDish({dish}){
         if(dish!=null){
             console.log()
             return(
-                <Card>
-                    <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name}/>
-                    <CardBody>
-                        <CardTitle>{dish.name}</CardTitle>
-                        <CardText>{dish.description}</CardText>
-                    </CardBody>
-                </Card>
+                <FadeTransform in 
+                transformProps={{
+                    exitTransform : 'scale(0.5) translateY(-50%)'
+                }}>
+                    <Card>
+                        <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name}/>
+                        <CardBody>
+                            <CardTitle>{dish.name}</CardTitle>
+                            <CardText>{dish.description}</CardText>
+                        </CardBody>
+                    </Card>
+                </FadeTransform>
             )
         }
         else{
@@ -32,16 +39,42 @@ import {baseUrl} from '../shared/baseUrl';
     function RenderComments({comments,postComment,dishId}){
         console.log("Comments : ",comments);
         if(comments!=null){
+            return(
+                <ul className="list-unstyled">
+                    <Stagger in>
+                        {comments.map((comment)=>{
+                            return(
+                                <Fade in>
+                                    <li key={comment.id}>
+                                        <p>{comment.comment}</p>
+                                        <p>--{comment.author},
+                                        {
+                                        //display the date in day-month-year format
+                                        new Intl.DateTimeFormat('en-IN',{year:'numeric',month:'short',day:'2-digit'})
+                                        .format(new Date(Date.parse(comment.date)))
+                                        }</p>
+                                    </li>
+                                </Fade>
+                            )
+                        })}
+                    </Stagger>
+                </ul>
+            )
+            /*
             const comm = comments.map((cmnt)=>{
                 return(
                     <div key = {cmnt.id} >
                         <ul className="list-unstyled">
-                            <li>{cmnt.comment}</li>
-                            <li>--{cmnt.author} , {
-                                //display the date in day-month-year format
-                                new Intl.DateTimeFormat('en-IN',{year:'numeric',month:'short',day:'2-digit'})
-                                .format(new Date(Date.parse(cmnt.date)))
-                            }</li>
+                            <Stagger in>
+                                <Fade in>
+                                    <li>{cmnt.comment}</li>
+                                    <li>--{cmnt.author} , {
+                                        //display the date in day-month-year format
+                                        new Intl.DateTimeFormat('en-IN',{year:'numeric',month:'short',day:'2-digit'})
+                                        .format(new Date(Date.parse(cmnt.date)))
+                                    }</li>
+                                </Fade>
+                            </Stagger>
                         </ul>
                     </div>
                 );
@@ -52,7 +85,7 @@ import {baseUrl} from '../shared/baseUrl';
                     <div>{comm}</div>
                     <CommentForm dishId={dishId} postComment={postComment}/>    
                 </div>
-            )
+            )*/
         }
         else{
             return(<div></div>)
