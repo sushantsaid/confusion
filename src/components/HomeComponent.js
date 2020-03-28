@@ -1,6 +1,7 @@
 import React from 'react';
 import {Card,CardBody,CardImg,CardText,CardTitle,CardSubtitle} from 'reactstrap';
 import { Loading } from './LoadingComponent';
+import { baseUrl } from '../shared/baseUrl';
 
 function RenderCard({item,isLoading,errMsg})//item will be received from the Home function/component
 {
@@ -13,7 +14,7 @@ function RenderCard({item,isLoading,errMsg})//item will be received from the Hom
     else
         return(
             <Card>
-                <CardImg src={item.image} alt={item.name}/>
+                <CardImg src={baseUrl+item.image} alt={item.name}/>
                 <CardBody>
                     <CardTitle>{item.name}</CardTitle>
                     {/* Render the designation only if it is present(in this case only leader has designation);dish and promotions doesn't have designation */}
@@ -34,7 +35,9 @@ function Home(props){
                     errMsg={props.dishesErrMsg}/>
                 </div>
                 <div className="col-12 col-md m-1">
-                    <RenderCard item={props.promotion}/>
+                    <RenderCard item={props.promotion}
+                    isLoading={props.promosLoading}
+                    errMsg={props.promosErrMsg}/>
                 </div>
                 <div className="col-12 col-md m-1">
                     <RenderCard item={props.leader}/>

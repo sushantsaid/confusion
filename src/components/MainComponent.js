@@ -11,7 +11,7 @@ import {Route,Switch,Redirect} from 'react-router-dom';
 //imports required for Redux
 import {withRouter} from 'react-router-dom'; //If we are using Redux, withRouter should be imported
 import {connect} from 'react-redux';
-import {addComment,fetchDishes} from '../redux/ActionCreators';
+import {addComment,fetchDishes,fetchComments,fetchPromos} from '../redux/ActionCreators';
 import {actions} from 'react-redux-form';
 
 const mapStateToProps = (state) => {
@@ -26,7 +26,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch =>({
   addComment : (dishId,rating,author,comment) => dispatch(addComment(dishId,rating,author,comment)),
   fetchDishes : ()=>{dispatch(fetchDishes())},
-  resetFeedbackForm : ()=>{dispatch(actions.reset('feedback'))}
+  resetFeedbackForm : ()=>{dispatch(actions.reset('feedback'))},
+  fetchComments : ()=> {dispatch(fetchComments())},
+  fetchPromos : ()=> {dispatch(fetchPromos())}
 });
 
 class Main extends Component{
@@ -40,6 +42,8 @@ class Main extends Component{
   //when the component is mounted then fetch the details of dishes
   componentDidMount(){
     this.props.fetchDishes();
+    this.props.fetchComments();
+    this.props.fetchPromos();
   }
 
   render(){
@@ -50,7 +54,9 @@ class Main extends Component{
         dish={this.props.dishes.dishes.filter((dish)=>dish.featured)[0]}// pass the featured dish as props
         dishesLoading={this.props.dishes.isLoading}
         dishesErrMsg={this.props.dishes.errMsg}
-        promotion = {this.props.promotions.filter((promo)=>promo.featured)[0]}// pass the featured promotion
+        promotion = {this.props.promotions.promotions.filter((promo)=>promo.featured)[0]}// pass the featured promotion
+        promosLoading = {this.props.promotions.isLoading}
+        promosErrMsg = {this.props.promotions.errMsg}
         leader = {this.props.leaders.filter((leader)=>leader.featured)[0]} // pass the featured leader
         />
       );
@@ -64,7 +70,8 @@ class Main extends Component{
         dish = {this.props.dishes.dishes.filter((dish)=>dish.id === parseInt(DISHID,10))[0]}
         isLoading={this.props.dishes.isLoading}
         errMsg={this.props.dishes.errMsg}
-        comments = {this.props.comments.filter((comment)=>comment.dishId === parseInt(DISHID,10))}
+        comments = {this.props.comments.comments.filter((comment)=>comment.dishId === parseInt(DISHID,10))}
+        commentsErrMsg = {this.props.comments.errMsg}
         //addComment attribute will add new comment submitted by user
         addComment = {this.props.addComment}
         />
