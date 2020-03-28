@@ -14,6 +14,9 @@ import {connect} from 'react-redux';
 import {postComment,fetchDishes,fetchComments,fetchPromos} from '../redux/ActionCreators';
 import {actions} from 'react-redux-form';
 
+//For React Animation
+import {TransitionGroup,CSSTransition} from 'react-transition-group';
+
 const mapStateToProps = (state) => {
   return {
     dishes : state.dishes,
@@ -83,14 +86,18 @@ class Main extends Component{
         {/*first component is navigation bar */}
         <Header/>
 
-        <Switch>
-          <Route path="/home" component={HomePage}/>
-          <Route exact path = "/menu" component = {()=> <Menu dishes={this.props.dishes}/>}/> {/*()=><Menu> is equivalent to ()=>{return(<Menu></Menu>)}*/}
-          <Route path = "/menu/:dishId" component = {dishWithId}/>
-          <Route exact path = "/contactus" component={()=><Contact resetFeedbackForm={this.props.resetFeedbackForm}/>}/>
-          <Route path = "/aboutus" component={()=><About leaders = {this.props.leaders}/>}/>
-          <Redirect to="/home"/>{/*Default path when none of the Route paths are matched*/}
-        </Switch>
+        <TransitionGroup>
+          <CSSTransition key={this.props.location.key} classNames="page" timeout={300}>
+            <Switch>
+              <Route path="/home" component={HomePage}/>
+              <Route exact path = "/menu" component = {()=> <Menu dishes={this.props.dishes}/>}/> {/*()=><Menu> is equivalent to ()=>{return(<Menu></Menu>)}*/}
+              <Route path = "/menu/:dishId" component = {dishWithId}/>
+              <Route exact path = "/contactus" component={()=><Contact resetFeedbackForm={this.props.resetFeedbackForm}/>}/>
+              <Route path = "/aboutus" component={()=><About leaders = {this.props.leaders}/>}/>
+              <Redirect to="/home"/>{/*Default path when none of the Route paths are matched*/}
+            </Switch>
+          </CSSTransition>
+        </TransitionGroup>
 
 
         {/*last component is dish details of selected dish */}

@@ -11,7 +11,7 @@ export const Comments = (state = {
                         return {...state, errMsg : null, comments : action.payload}
 
         case ActionType.COMMENTS_FAILED:
-                        return {...state, errMsg : action.payload, comments :[]}
+                        return {...state, errMsg : action.payload}
 
         case ActionType.ADD_COMMENT:
                         //copy the payload to local variable(comment)
