@@ -28,9 +28,25 @@ export const fetchDishes = () => (dispatch) =>{
 
     //fetch dishes from server
     return fetch(baseUrl+'dishes')
+        .then(response=>{
+            if(response.ok){
+                return response; //return the response to the next .then()
+            }
+            else{
+                //contact was made to server but server gave some error
+                var error = new Error('Error : '+response.status+' '+response.statusText);
+                error.response = response;
+                throw error;
+            }
+        },//contact couldn't be made to the server and we have received some error
+        error=>{
+            var errMsg = new Error(error.message);
+            throw errMsg;
+        })
         .then(response => response.json()) //convert response to JSON
-        .then(dishes => dispatch(addDishes(dishes))); //dispatch the dishes fetched from server to the store
-}
+        .then(dishes => dispatch(addDishes(dishes))) //dispatch the dishes fetched from server to the store
+        .catch(error=>dispatch(dishesFailed(error.message)));
+    }
 
 export const dishesLoading = () =>({
     type : ActionType.DISHES_LOADING
@@ -49,8 +65,24 @@ export const addDishes = (dishes) =>({
 //Functions for Comments
 export const fetchComments = ()=>(dispatch)=>{
     return fetch(baseUrl+'comments')
+        .then(response=>{
+            if(response.ok){
+                return response; //return the response to the next .then()
+            }
+            else{
+                //contact was made to server but server gave some error
+                var error = new Error('Error : '+response.status+' '+response.statusText);
+                error.response = response;
+                throw error;
+            }
+        },//contact couldn't be made to the server and we have received some error
+        error=>{
+            var errMsg = new Error(error.message);
+            throw errMsg;
+        })
         .then(response => response.json())
-        .then(comments => dispatch(addComments(comments)));
+        .then(comments => dispatch(addComments(comments)))
+        .catch(error=>dispatch(commentsFailed(error.message)));
 }
 
 export const commentsFailed = (errmsg) =>({
@@ -65,21 +97,28 @@ export const addComments=(comments)=>({
 
 //Functions for Promotions
 export const fetchPromos = () => (dispatch) =>{
-    //first dispatch
     dispatch(promosLoading(true));
-
-    //second dispatch
-    /*
-    setTimeout(()=>{
-        dispatch(addDishes(DISHES));
-    },2000);
-    */
-
-    //fetch dishes from server
+    //fetch promotions from server
     return fetch(baseUrl+'promotions')
+        .then(response=>{
+            if(response.ok){
+                return response; //return the response to the next .then()
+            }
+            else{
+                //contact was made to server but server gave some error
+                var error = new Error('Error : '+response.status+' '+response.statusText);
+                error.response = response;
+                throw error;
+            }
+        },//contact couldn't be made to the server and we have received some error
+        error=>{
+            var errMsg = new Error(error.message);
+            throw errMsg;
+        })
         .then(response => response.json()) //convert response to JSON
-        .then(promos => dispatch(addPromos(promos))); //dispatch the dishes fetched from server to the store
-}
+        .then(promos => dispatch(addPromos(promos))) //dispatch the dishes fetched from server to the store
+        .catch(error=>dispatch(promosFailed(error.message)));
+    }
 
 export const promosLoading = () =>({
     type : ActionType.PROMOS_LOADING
