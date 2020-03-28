@@ -29,7 +29,7 @@ import {baseUrl} from '../shared/baseUrl';
     }
 
     //function for adding 'Comments' to the view
-    function RenderComments({comments,addComment,dishId}){
+    function RenderComments({comments,postComment,dishId}){
         console.log("Comments : ",comments);
         if(comments!=null){
             const comm = comments.map((cmnt)=>{
@@ -50,7 +50,7 @@ import {baseUrl} from '../shared/baseUrl';
                 <div>
                     <h4 className="col-12">Comments</h4>
                     <div>{comm}</div>
-                    <CommentForm dishId={dishId} addComment={addComment}/>    
+                    <CommentForm dishId={dishId} postComment={postComment}/>    
                 </div>
             )
         }
@@ -101,7 +101,7 @@ import {baseUrl} from '../shared/baseUrl';
                     </div>
                     <div className="col-12 col-md-5">
                         <RenderComments comments={props.comments}
-                            addComment = {props.addComment}
+                            postComment = {props.postComment}
                             dishId = {props.dish.id}/>
                     </div>
                 </div>     
@@ -140,7 +140,7 @@ class CommentForm extends Component{
 
     handleSubmit(values){
         this.toggleModal();
-        this.props.addComment(this.props.dishId,values.rating,values.author,values.comment);
+        this.props.postComment(this.props.dishId,values.rating,values.author,values.comment);
     }
 
     render(){

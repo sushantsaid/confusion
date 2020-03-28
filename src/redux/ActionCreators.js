@@ -2,18 +2,53 @@ import * as ActionType from './ActionTypes';
 import {DISHES} from '../shared/dishes';
 import { baseUrl } from '../shared/baseUrl';
 
-export const addComment = (dishId,rating,author,comment) => ({
+export const addComment = (comment) => ({
     //define the type of action
     type : ActionType.ADD_COMMENT,
 
     //now define the payload field
-    payload : {
+    payload : comment
+});
+
+export const postComment = (dishId,rating,author,comment)=>(dispatch)=>{
+    const newComment = {
         dishId : dishId,
         rating : rating,
         author : author,
         comment : comment
     }
-});
+    newComment.date = new Date().toISOString();
+//By default the method is GET. Below is the way to use POST method
+//We are sending the newComment to the server
+    return fetch(baseUrl + 'comments',{
+        method : 'POST',
+        body : JSON.stringify(newComment),
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        credentials : 'same-origin'
+    })
+    .then(response=>{
+        if(response.ok){
+            return response; //return the response to the next .then()
+        }
+        else{
+            //contact was made to server but server gave some error
+            var error = new Error('Error : '+response.status+' '+response.statusText);
+            error.response = response;
+            throw error;
+        }
+    },//contact couldn't be made to the server and we have received some error
+    error=>{
+        var errMsg = new Error(error.message);
+        throw errMsg;
+    })
+    .then(response => response.json()) //convert response to JSON
+    .then(response => dispatch(addComment(response))) //dispatch the updated comments fetched from server to the store
+    .catch(error=>{
+        console.log("POST comments",error.message);
+        alert("Couldn't post your commnet : "+error.message);});
+}
 
 export const fetchDishes = () => (dispatch) =>{
     //first dispatch
