@@ -168,3 +168,42 @@ export const addPromos = (promos) =>({
     type : ActionType.ADD_PROMOS,
     payload : promos
 });
+
+//Functions for Leaders
+export const fetchLeaders = () => (dispatch) =>{
+    dispatch(leadersLoading(true));
+    //fetch leaders from server
+    return fetch(baseUrl+'leaders')
+        .then(response=>{
+            if(response.ok){
+                return response; //return the response to the next .then()
+            }
+            else{
+                //contact was made to server but server gave some error
+                var error = new Error('Error : '+response.status+' '+response.statusText);
+                error.response = response;
+                throw error;
+            }
+        },//contact couldn't be made to the server and we have received some error
+        error=>{
+            var errMsg = new Error(error.message);
+            throw errMsg;
+        })
+        .then(response => response.json()) //convert response to JSON
+        .then(leaders => dispatch(addLeaders(leaders))) //dispatch the leaders fetched from server to the store
+        .catch(error=>dispatch(leadersFailed(error.message)));
+    }
+
+export const leadersLoading = () =>({
+    type : ActionType.LEADERS_LOADING
+});
+
+export const leadersFailed = (errmsg) =>({
+    type : ActionType.LEADERS_FAILED,
+    payload : errmsg
+});
+
+export const addLeaders = (leaders) =>({
+    type : ActionType.ADD_LEADERS,
+    payload : leaders
+});
