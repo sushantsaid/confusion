@@ -11,7 +11,7 @@ import {Route,Switch,Redirect} from 'react-router-dom';
 //imports required for Redux
 import {withRouter} from 'react-router-dom'; //If we are using Redux, withRouter should be imported
 import {connect} from 'react-redux';
-import {postComment,fetchDishes,fetchComments,fetchPromos,fetchLeaders} from '../redux/ActionCreators';
+import {postComment,postFeedback,fetchDishes,fetchComments,fetchPromos,fetchLeaders} from '../redux/ActionCreators';
 import {actions} from 'react-redux-form';
 
 //For React Animation
@@ -28,11 +28,15 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch =>({
   postComment : (dishId,rating,author,comment) => dispatch(postComment(dishId,rating,author,comment)),
+  postFeedback : (firstname,lastname,telnum,email,agree,contactType,message)=>dispatch(postFeedback(firstname,lastname,telnum,email,agree,contactType,message)),
   fetchDishes : ()=>{dispatch(fetchDishes())},
   resetFeedbackForm : ()=>{dispatch(actions.reset('feedback'))},
   fetchComments : ()=> {dispatch(fetchComments())},
   fetchPromos : ()=> {dispatch(fetchPromos())},
+  
+  //Assignment 4 task
   fetchLeaders : ()=> {dispatch(fetchLeaders())}
+  ///////////////////////////////////////////////
 });
 
 class Main extends Component{
@@ -48,7 +52,9 @@ class Main extends Component{
     this.props.fetchDishes();
     this.props.fetchComments();
     this.props.fetchPromos();
+    //Assignment 4 task
     this.props.fetchLeaders();
+    //////////////////////////
   }
 
   render(){
@@ -62,9 +68,12 @@ class Main extends Component{
         promotion = {this.props.promotions.promotions.filter((promo)=>promo.featured)[0]}// pass the featured promotion
         promosLoading = {this.props.promotions.isLoading}
         promosErrMsg = {this.props.promotions.errMsg}
+        
+        //Assignment 4 task
         leader = {this.props.leaders.leaders.filter((leader)=>leader.featured)[0]} // pass the featured leader
         leaderLoading={this.props.leaders.isLoading}
         leaderErrMsg={this.props.leaders.errMsg}
+        ///////////////////////////////////////
         />
       );
     }
@@ -96,7 +105,7 @@ class Main extends Component{
               <Route path="/home" component={HomePage}/>
               <Route exact path = "/menu" component = {()=> <Menu dishes={this.props.dishes}/>}/> {/*()=><Menu> is equivalent to ()=>{return(<Menu></Menu>)}*/}
               <Route path = "/menu/:dishId" component = {dishWithId}/>
-              <Route exact path = "/contactus" component={()=><Contact resetFeedbackForm={this.props.resetFeedbackForm}/>}/>
+              <Route exact path = "/contactus" component={()=><Contact resetFeedbackForm={this.props.resetFeedbackForm} postFeedback={this.props.postFeedback}/>}/>
               <Route path = "/aboutus" component={()=><About leaders = {this.props.leaders}/>}/>
               <Redirect to="/home"/>{/*Default path when none of the Route paths are matched*/}
             </Switch>

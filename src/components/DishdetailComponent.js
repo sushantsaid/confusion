@@ -40,7 +40,9 @@ import {FadeTransform,Fade,Stagger} from 'react-animation-components';
         console.log("Comments : ",comments);
         if(comments!=null){
             return(
-                <ul className="list-unstyled">
+                <div>
+                    <h4 className="col-12">Comments</h4>
+                    <ul className="list-unstyled">
                     <Stagger in>
                         {comments.map((comment)=>{
                             return(
@@ -53,12 +55,18 @@ import {FadeTransform,Fade,Stagger} from 'react-animation-components';
                                         new Intl.DateTimeFormat('en-IN',{year:'numeric',month:'short',day:'2-digit'})
                                         .format(new Date(Date.parse(comment.date)))
                                         }</p>
-                                    </li>
+                                    </li>  
                                 </Fade>
                             )
                         })}
+                        <CommentForm dishId={dishId} postComment={postComment}/>
                     </Stagger>
+                
+
                 </ul>
+                </div>
+                
+                
             )
             /*
             const comm = comments.map((cmnt)=>{
